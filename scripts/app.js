@@ -1,64 +1,146 @@
-//Dice backend controller
 const diceController = (function() {
-  let diceValues = {
-    dice1: 0,
-    dice2: 0
+  let players = {
+    activePlayer: 1,
+    player1Score: 0,
+    player2Score: 0,
+    player1: {
+      roundScore: 0,
+      fullScore: 0
+    },
+    player2: {
+      roundScore: 0,
+      fullScore: 0
+    }
   };
-  const randomNumber = () => {
-    return Math.floor(Math.random() * 6) + 1;
+
+  const randomNumberGenarator = () => {
+    return Math.floor(Math.random() * 6 + 1);
   };
 
   return {
-    diceRoll: function() {
-      diceValues.dice1 = randomNumber();
-      diceValues.dice2 = randomNumber();
-
-      return diceValues;
+    rollDice: () => {
+      const activePlayer = "player" + players.activePlayer;
+      console.log("## " + activePlayer);
+      const dice = {
+        dice1: randomNumberGenarator(),
+        dice2: randomNumberGenarator(),
+        sum: function() {
+          return this.dice1 + this.dice2;
+        }
+      };
+      if (dice.dice1 === 1 || dice.dice2 === 1) {
+        players[activePlayer].fullScore = 0;
+        players[activePlayer].roundScore = 0;
+        players.activePlayer === 1
+          ? (players.activePlayer = 2)
+          : (players.activePlayer = 1);
+      } else {
+        players[activePlayer].fullScore += dice.sum();
+        players[activePlayer].roundScore = dice.sum();
+      }
+      return dice;
+    },
+    getActivePlyer: () => {
+      return players.activePlayer;
+    },
+    setActivePlyer: function(player) {
+      players.activePlayer = player;
+    },
+    getPlayers: () => {
+      return players;
     }
   };
 })();
 
-//Dice frontend controller
 const uIController = (function() {
-  let domStrings = {
+  const domStrings = {
     diceImage1: "#dice-image-1",
     diceImage2: "#dice-image-2",
-    rollBtnName: "#rollBtn"
+    rollDiceBtn: ".roll-dice",
+    playerScoreCard: "#player-score-",
+    activePlayer: ".player-score-",
+    player1RndScro: "#player-score-1",
+    player2RndScro: "#player-score-2",
+    player1totalScore: "#player-1-totalscore",
+    player2totalScore: "#player-2-totalscore"
   };
   return {
-    getDomString: function() {
+    domString: function() {
       return domStrings;
     },
-    updateDiceImage: function(dice) {
+    updateScore: function(activePlayer) {},
+    updateDice: function(dice) {
       document.querySelector(
         domStrings.diceImage1
       ).src = `images/dice-${dice.dice1}.png`;
       document.querySelector(
         domStrings.diceImage2
       ).src = `images/dice-${dice.dice2}.png`;
-      console.log(dice);
+      console.log(`dice value 1 ${dice.dice1} dice value 2 ${dice.dice2}`);
+    },
+    updateScore: function(player, score) {
+      document.querySelector(
+        domStrings.playerScoreCard + player
+      ).innerHTML = score;
+    },
+    updateScoreBoard: function(players) {
+      /*
+      for (let i = 0; i++; i < 3) {
+        const ply = "player" + i;
+        const plytotlScro = "player" + i + "totalScore";
+        const plyRndScro = "player" + i + "RndScro";
+        console.log(ply);
+        document.querySelector(domStrings[plyRndScro]).innerHTML =
+          players[ply].roundScore;
+        document.querySelector(domStrings[plytotlScro]).innerHTML =
+          players[ply].fullScore;
+      }
+       */
+      document.querySelector(domStrings.player1RndScro).innerHTML =
+        players.player1.roundScore;
+      document.querySelector(domStrings.player1totalScore).innerHTML =
+        players.player1.fullScore;
+      document.querySelector(domStrings.player2RndScro).innerHTML =
+        players.player2.roundScore;
+      document.querySelector(domStrings.player2totalScore).innerHTML =
+        players.player2.fullScore;
+
+      console.log(players);
+    },
+    updateActivePlayer: function(player) {
+      const nonActivePlayer = player === 1 ? 2 : 1;
+      document
+        .querySelector(domStrings.activePlayer + player)
+        .classList.add("active");
+      document
+        .querySelector(domStrings.activePlayer + nonActivePlayer)
+        .classList.remove("active");
+      console.log(`non active player ${nonActivePlayer}`);
     }
   };
 })();
 
-//controller
-const controller = (function(uIcontroller, diceController) {
-  let domStrings = uIcontroller.getDomString();
+const controller = (function(uIController, diceController) {
+  const domStrings = uIController.domString();
 
-  const updateDiceImage = () => {
-    uIcontroller.updateDiceImage(diceController.diceRoll());
+  const updateScoreBoard = () => {
+    let diceValues = diceController.rollDice();
+    uIController.updateDice(diceValues);
+    uIController.updateActivePlayer(diceController.getActivePlyer());
+    uIController.updateScoreBoard(diceController.getPlayers());
   };
 
-  const setUpEventListner = () => {
+  const setUPEventListner = () => {
     document
-      .querySelector(domStrings.rollBtnName)
-      .addEventListener("click", updateDiceImage);
+      .querySelector(domStrings.rollDiceBtn)
+      .addEventListener("click", updateScoreBoard);
   };
 
   return {
     init: function() {
       console.log("Application has started");
-      setUpEventListner();
+      uIController.updateActivePlayer(diceController.getActivePlyer());
+      setUPEventListner();
     }
   };
 })(uIController, diceController);

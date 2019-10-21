@@ -17,9 +17,19 @@
     />
     <!--Google Fonts-->
     <link
-      href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:400,700|Satisfy&display=swap"
+      href="https://fonts.googleapis.com/css?family=Noto+Sans+SC:100,400,700|Satisfy&display=swap"
       rel="stylesheet"
     />
+    <link
+      href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300&display=swap"
+      rel="stylesheet"
+    />
+    <!--Font Awsome-->
+    <script
+      src="https://kit.fontawesome.com/e74b62dace.js"
+      crossorigin="anonymous"
+    ></script>
+
     <!--Custom CSS-->
     <link rel="stylesheet" href="css/styles.css" type="text/css" />
     <title>Pig Game</title>
@@ -28,30 +38,33 @@
     <div class="header-section">
       <h1 class="game-title">The Pig Game</h1>
     </div>
-    <div class="body-section">
-      <div class="dice row">
-        <div class="dice-1 col-md-6">
-          <img
-            id="dice-image-1"
-            class="dice-Images"
-            src="images/dice-1.png"
-            alt="dice image 1"
-          />
+    <div class="body-section ">
+      <div class="score-board row">
+        <div class="col-md-6 player-score-1">
+          <h2>Player 1 <span class="dot"></span></h2>
+          <h3 id="player-score-1" class="player-score">0</h3>
+          <div class="score">
+            <h4>Score</h4>
+            <p id="player-1-totalscore">0</p>
+          </div>
         </div>
-        <div class="dice-2 col-md-6">
-          <img
-            id="dice-image-2"
-            class="dice-Images"
-            src="images/dice-3.png"
-            alt="dice image 2"
-          />
+        <div class="col-md-6 player-score-2">
+          <h2>Player 2 <span class="dot"></span></h2>
+          <h3 id="player-score-2" class="player-score">0</h3>
+          <div class="score score2">
+            <h4>Score</h4>
+            <p id="player-2-totalscore">0</p>
+          </div>
         </div>
       </div>
-    </div>
-    <div id="footer-section">
-      <button id="rollBtn" class="btn btn-success btn-lg roll-dice">
-        Roll Dice
+
+      <button class="btn btn-outline-danger roll-dice">
+        <i class="fas fa-dice"></i> Roll Dice
       </button>
+      <div class="dice">
+        <img id="dice-image-1" class="dice-image" src="images/dice-1.png" />
+        <img id="dice-image-2" class="dice-image" src="images/dice-1.png" />
+      </div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
