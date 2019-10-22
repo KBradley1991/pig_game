@@ -90,3 +90,32 @@ body {
   top: 71%;
   left: 47%;
 }
+.hold-btn {
+  position: absolute;
+  top: 78%;
+  left: 48%;
+}
+.btn-tags:hover {
+  padding-left: 2%;
+}
+.game-rules {
+  color: #eb4d4d;
+  font-family: "Noto Sans SC", sans-serif;
+  margin-left: 90%;
+}
+.rules-section {
+  display: none;
+}
+.rules {
+  font-family: "Noto Sans SC", sans-serif;
+  font-size: 2rem;
+  padding: 2% 0;
+}
+.game-rules-list {
+  padding: 1% 10%;
+}
+.new-btn {
+  position: absolute;
+  top: 35%;
+  left: 46%;
+}

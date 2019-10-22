@@ -36,7 +36,25 @@
   </head>
   <body>
     <div class="header-section">
+      <a class="game-rules" href="#">Game Rules</a>
       <h1 class="game-title">The Pig Game</h1>
+      <div class="rules-section row">
+        <div class="col-sm-12">
+          <ul class="game-rules-list">
+            <li class="rules">
+              On a turn, a player rolls the die repeatedly. The goal is to
+              accumulate as many points as possible, adding up the numbers
+              rolled on the die. However, if a player rolls a 1, the player's
+              turn is over and any points they have accumulated during are
+              forfeited.
+            </li>
+            <li class="rules">
+              The winning score is 100
+            </li>
+          </ul>
+          <p></p>
+        </div>
+      </div>
     </div>
     <div class="body-section ">
       <div class="score-board row">
@@ -56,14 +74,20 @@
             <p id="player-2-totalscore">0</p>
           </div>
         </div>
-      </div>
-
-      <button class="btn btn-outline-danger roll-dice">
-        <i class="fas fa-dice"></i> Roll Dice
-      </button>
-      <div class="dice">
-        <img id="dice-image-1" class="dice-image" src="images/dice-1.png" />
-        <img id="dice-image-2" class="dice-image" src="images/dice-1.png" />
+        <button class="btn btn-outline-danger new-btn">
+          <i class="fas fa-plus"></i>
+          <span class="btn-tags">New Game</span>
+        </button>
+        <button class="btn btn-outline-danger roll-dice">
+          <i class="fas fa-dice"></i> <span class="btn-tags">Roll Dice</span>
+        </button>
+        <button class="btn btn-outline-danger hold-btn">
+          <i class="fas fa-exchange-alt"></i> <span class="btn-tags">Hold</span>
+        </button>
+        <div class="dice">
+          <img id="dice-image-1" class="dice-image" src="images/dice-1.png" />
+          <img id="dice-image-2" class="dice-image" src="images/dice-1.png" />
+        </div>
       </div>
     </div>
     <!-- Optional JavaScript -->

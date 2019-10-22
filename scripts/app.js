@@ -1,8 +1,8 @@
 const diceController = (function() {
+  const WinningScore = 100;
+  let gameStatus = true;
   let players = {
     activePlayer: 1,
-    player1Score: 0,
-    player2Score: 0,
     player1: {
       roundScore: 0,
       fullScore: 0
@@ -48,6 +48,27 @@ const diceController = (function() {
     },
     getPlayers: () => {
       return players;
+    },
+    checkIfGameOver: () => {
+      if (
+        players.player1.fullScore >= WinningScore ||
+        players.player2.fullScore >= WinningScore
+      ) {
+        gameStatus = false;
+      }
+      return gameStatus;
+    },
+    changeActiveUser: () => {
+      players.activePlayer === 1
+        ? (players.activePlayer = 2)
+        : (players.activePlayer = 1);
+    },
+    newGame: () => {
+      players.player1.fullScore = 0;
+      players.player1.roundScore = 0;
+      players.player2.fullScore = 0;
+      players.player2.roundScore = 0;
+      gameStatus = true;
     }
   };
 })();
@@ -57,13 +78,19 @@ const uIController = (function() {
     diceImage1: "#dice-image-1",
     diceImage2: "#dice-image-2",
     rollDiceBtn: ".roll-dice",
+    holdDiceBtn: ".hold-btn",
     playerScoreCard: "#player-score-",
     activePlayer: ".player-score-",
     player1RndScro: "#player-score-1",
     player2RndScro: "#player-score-2",
     player1totalScore: "#player-1-totalscore",
-    player2totalScore: "#player-2-totalscore"
+    player2totalScore: "#player-2-totalscore",
+    rulesLink: ".game-rules",
+    gameRules: ".rules-section",
+    bodySection: ".body-section",
+    newGameBtn: ".new-btn"
   };
+  let ruleButnStatus = false;
   return {
     domString: function() {
       return domStrings;
@@ -84,18 +111,6 @@ const uIController = (function() {
       ).innerHTML = score;
     },
     updateScoreBoard: function(players) {
-      /*
-      for (let i = 0; i++; i < 3) {
-        const ply = "player" + i;
-        const plytotlScro = "player" + i + "totalScore";
-        const plyRndScro = "player" + i + "RndScro";
-        console.log(ply);
-        document.querySelector(domStrings[plyRndScro]).innerHTML =
-          players[ply].roundScore;
-        document.querySelector(domStrings[plytotlScro]).innerHTML =
-          players[ply].fullScore;
-      }
-       */
       document.querySelector(domStrings.player1RndScro).innerHTML =
         players.player1.roundScore;
       document.querySelector(domStrings.player1totalScore).innerHTML =
@@ -116,6 +131,20 @@ const uIController = (function() {
         .querySelector(domStrings.activePlayer + nonActivePlayer)
         .classList.remove("active");
       console.log(`non active player ${nonActivePlayer}`);
+    },
+    displayRules: () => {
+      if (ruleButnStatus === false) {
+        document.querySelector(domStrings.gameRules).style.display = "block";
+        document.querySelector(domStrings.bodySection).style.display = "none";
+        document.querySelector(domStrings.rulesLink).innerHTML =
+          "<< Back to Home";
+        ruleButnStatus = true;
+      } else {
+        document.querySelector(domStrings.gameRules).style.display = "none";
+        document.querySelector(domStrings.bodySection).style.display = "block";
+        document.querySelector(domStrings.rulesLink).innerHTML = "Game Rules";
+        ruleButnStatus = false;
+      }
     }
   };
 })();
@@ -124,9 +153,24 @@ const controller = (function(uIController, diceController) {
   const domStrings = uIController.domString();
 
   const updateScoreBoard = () => {
-    let diceValues = diceController.rollDice();
-    uIController.updateDice(diceValues);
+    let gameStatus = diceController.checkIfGameOver();
+    if (gameStatus === true) {
+      let diceValues = diceController.rollDice();
+      uIController.updateDice(diceValues);
+      uIController.updateActivePlayer(diceController.getActivePlyer());
+      uIController.updateScoreBoard(diceController.getPlayers());
+    } else {
+      console.log("game is dead");
+    }
+  };
+
+  const changeActiveUser = () => {
+    diceController.changeActiveUser();
     uIController.updateActivePlayer(diceController.getActivePlyer());
+  };
+
+  const newGame = () => {
+    diceController.newGame();
     uIController.updateScoreBoard(diceController.getPlayers());
   };
 
@@ -134,6 +178,15 @@ const controller = (function(uIController, diceController) {
     document
       .querySelector(domStrings.rollDiceBtn)
       .addEventListener("click", updateScoreBoard);
+    document
+      .querySelector(domStrings.holdDiceBtn)
+      .addEventListener("click", changeActiveUser);
+    document
+      .querySelector(domStrings.rulesLink)
+      .addEventListener("click", uIController.displayRules);
+    document
+      .querySelector(domStrings.newGameBtn)
+      .addEventListener("click", newGame);
   };
 
   return {
